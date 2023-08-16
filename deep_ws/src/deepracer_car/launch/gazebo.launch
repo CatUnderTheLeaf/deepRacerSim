@@ -13,7 +13,7 @@
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
   <arg name="physics" default="ode"/>
-  <arg name="verbose" default="false"/>
+  <arg name="verbose" default="true"/>
   <arg name="output" default="screen"/>
   <arg name="world_name" default="worlds/empty.world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
   <arg name="respawn_gazebo" default="false"/>
@@ -52,8 +52,6 @@
 
 </launch>
 
-<!-- car goes round in a circle
-changes in racecar_control.yaml and racecar.gazebo 
-or maybe it is so without road friction?????-->
 
-
+ <!-- export GAZEBO_MODEL_PATH=:/home/kolobok/my_projects/simulation-races/race_ws/src/racecar_description/models:/usr/share/gazebo-11/models:/home/kolobok/my_projects/deepRacerSim/deep_ws/src/simulation/tracks/ -->
+ <!-- export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/home/kolobok/my_projects/deepRacerSim/deep_ws/src/simulation/ -->
