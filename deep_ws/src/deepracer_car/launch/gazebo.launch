@@ -51,7 +51,3 @@
   <include file="$(find deepracer_car)/launch/racecar.launch"/>
 
 </launch>
-
-
- <!-- export GAZEBO_MODEL_PATH=:/home/kolobok/my_projects/simulation-races/race_ws/src/racecar_description/models:/usr/share/gazebo-11/models:/home/kolobok/my_projects/deepRacerSim/deep_ws/src/simulation/tracks/ -->
- <!-- export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/home/kolobok/my_projects/deepRacerSim/deep_ws/src/simulation/ -->

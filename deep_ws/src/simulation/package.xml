@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>simulation</name>
+  <version>0.0.1</version>
+  <description>The simulation package</description>
+
+  <maintainer email="catundertheleaf@gmail.com">Stacy</maintainer>
+ 
+
+  <license>Apache License 2.0</license>
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <gazebo_ros gazebo_model_path="${prefix}/models"/>
+    <gazebo_ros gazebo_media_path="${prefix}/worlds"/>
+  </export>
+</package>

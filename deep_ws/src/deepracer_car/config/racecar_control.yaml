@@ -58,3 +58,11 @@ right_steering_hinge_position_controller:
     - right_steering_hinge_joint
   type: position_controllers/JointGroupPositionController
   pid: {p: 1.0, i: 0.0, d: 0.5}
+
+gazebo_ros_control/pid_gains:
+  left_rear_wheel_joint: {p: 0.1, i: 0.0, d: 0.0, i_clamp: 0.0}
+  right_rear_wheel_joint: {p: 0.1, i: 0.0, d: 0.0, i_clamp: 0.0}
+  left_front_wheel_joint: {p: 0.1, i: 0.0, d: 0.0, i_clamp: 0.0}
+  right_front_wheel_joint: {p: 0.1, i: 0.0, d: 0.0, i_clamp: 0.0}
+  left_steering_hinge_joint: {p: 0.05, i: 0.0, d: 0.0}
+  right_steering_hinge_joint: {p: 0.05, i: 0.0, d: 0.0}
