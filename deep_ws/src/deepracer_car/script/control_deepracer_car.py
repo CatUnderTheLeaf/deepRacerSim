@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import rospy
-from geometry_msgs.msg import TwistStamped
+# from geometry_msgs.msg import Twist
+from ackermann_msgs.msg import AckermannDriveStamped
 from std_msgs.msg import Float64MultiArray
 
 
@@ -36,10 +37,10 @@ class CarController():
         self._wheel_base = 0.164023
 
         self._cmd_lock = threading.Lock()
-        # Linear velocity in X received on command (m/s)
-        self.target_linear_ = 0
-        # Angular velocity in Z received on command (rad/s)
-        self.target_rot_ = 0
+        # Car speed (m/s)
+        self.speed = 0
+        # Steering angle (rad)
+        self.steering_angle = 0
 
         # Create publishers for controlling the car
         self._velocity_pub_dict_ = OrderedDict()
@@ -50,8 +51,8 @@ class CarController():
         for l_r, topic in STEERING_TOPICS:
             self._steering_pub_dict_[l_r] = rospy.Publisher(topic, Float64MultiArray, queue_size=1)
         
-        self.cmd_sub = rospy.Subscriber("cmd_vel", TwistStamped,
-                             self.cmd_cb, queue_size=1)
+        self.cmd_sub = rospy.Subscriber("/ackermann_cmd", AckermannDriveStamped,
+                             self.ackermann_cmd_cb, queue_size=1)
 
         self.control()
 
@@ -59,7 +60,7 @@ class CarController():
         update_rate = 50 # Hz
         rate = rospy.Rate(update_rate) 
         update_period = 1/update_rate
-        rospy.loginfo("update_period {}".format(update_period))
+        # rospy.loginfo("update_period {}".format(update_period))
 
         last_time = rospy.get_time()
 
@@ -81,26 +82,26 @@ class CarController():
 
     def calcTargetVelAndPosition(self, delta_t):
         
-        target_linear = max(min(MAX_SPEED, self.target_linear_), MIN_SPEED)
-        target_rot = self.target_rot_ * math.copysign(1.0, self.target_linear_)
-        target_rot = max(min(MAX_ANGLE, target_rot), MIN_ANGLE)
+        target_speed = max(min(MAX_SPEED, self.speed), MIN_SPEED)
+        target_steer_angle = self.steering_angle * math.copysign(1.0, self.speed)
+        target_steer_angle = max(min(MAX_ANGLE, target_steer_angle), MIN_ANGLE)
 
-        tanSteer = math.tan(target_rot)
+        tanSteer = math.tan(target_steer_angle)
 
         t_left_steering = math.atan2(tanSteer, 1.0 - self._wheel_separation / 2.0 / self._wheel_base * tanSteer)
         t_right_steering = math.atan2(tanSteer, 1.0 + self._wheel_separation / 2.0 / self._wheel_base * tanSteer)
 
-        t_speed = target_linear / self._wheel_radius
+        t_speed = target_speed / self._wheel_radius
 
         return t_speed, t_left_steering, t_right_steering
 
-    def cmd_cb(self, msg):
-        rospy.loginfo("received msg")
+    def ackermann_cmd_cb(self, msg):
+        # rospy.loginfo("received msg")
         with self._cmd_lock:
-            self.target_linear_ = msg.twist.linear.x
-            self.target_rot_ = msg.twist.angular.z   
-        rospy.loginfo("from msg target_linear_ {}".format(self.target_linear_)) 
-        rospy.loginfo("from msg target_rot_ {}".format(self.target_rot_))       
+            self.speed = msg.drive.speed
+            self.steering_angle = msg.drive.steering_angle  
+        # rospy.loginfo("from msg speed {}".format(self.speed)) 
+        # rospy.loginfo("from msg steering_angle {}".format(self.steering_angle))       
 
 
     def publish_commands(self, t_speed, t_left_steering, t_right_steering):

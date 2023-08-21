@@ -23,5 +23,7 @@
                                           
   <node name="control_car" pkg="deepracer_car" type="control_deepracer_car.py" output="screen"/>
   <!-- try this to move a car -->
-  <!-- rostopic pub -1 /cmd_vel geometry_msgs/TwistStamped '{header: auto, twist: {linear: {x: 0.5}, angular: {z: 0.0}} }' -->
+  <!-- rostopic pub -1 /ackermann_cmd ackermann_msgs/AckermannDriveStamped '{header: auto, drive: {steering_angle: 0.0, speed: 0.5} }' -->
+  <!-- or -->
+  <!-- roslaunch teleop_ackermann teleop.launch -->
 </launch>
