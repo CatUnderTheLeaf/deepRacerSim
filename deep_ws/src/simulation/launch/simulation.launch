@@ -6,7 +6,12 @@
     <arg name="world_name" value="$(arg world_name)"/>
   </include>
 
+
+
 </launch>
 
-<!-- export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/home/kolobok/my_projects/deepRacerSim/deep_ws/src/simulation/tracks/models -->
+<!-- control car in another terminal window with -->
+<!-- roslaunch teleop_ackermann teleop.launch -->
+
+<!-- export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/home/kolobok/my_projects/deepRacerSim/deep_ws/src/simulation/tracks/ -->
  <!-- export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/home/kolobok/my_projects/deepRacerSim/deep_ws/src/simulation/ -->

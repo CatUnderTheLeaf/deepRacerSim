@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import rospy
-# from geometry_msgs.msg import Twist
 from ackermann_msgs.msg import AckermannDriveStamped
 from std_msgs.msg import Float64MultiArray
 
@@ -11,30 +10,24 @@ import threading
 
 
 # List of required velocity topics, one topic per wheel
-VELOCITY_TOPICS = ['/left_rear_wheel_velocity_controller/command',
-                   '/right_rear_wheel_velocity_controller/command',
-                   '/left_front_wheel_velocity_controller/command',
-                   '/right_front_wheel_velocity_controller/command']
+# VELOCITY_TOPICS = ['/left_rear_wheel_velocity_controller/command',
+#                    '/right_rear_wheel_velocity_controller/command',
+#                    '/left_front_wheel_velocity_controller/command',
+#                    '/right_front_wheel_velocity_controller/command']
 
 # List of required steering hinges
-STEERING_TOPICS = [('left','/left_steering_hinge_position_controller/command'),
-                   ('right','/right_steering_hinge_position_controller/command')]
-
-# SPEED is linear velocity in m/s.
-MAX_SPEED = 4
-MIN_SPEED = 0.0
-# ANGLE is the steering angle value in rad.
-MAX_ANGLE = 0.523599
-MIN_ANGLE = -0.523599
+# STEERING_TOPICS = [('left','/left_steering_hinge_position_controller/command'),
+#                    ('right','/right_steering_hinge_position_controller/command')]
 
 class CarController():
 
     def __init__(self):
-        # TODO
-        # get from params or urdf etc.
-        self._wheel_radius = 0.03
-        self._wheel_separation = 0.159202
-        self._wheel_base = 0.164023
+        self.max_speed = rospy.get_param("~max_speed", 4.0)
+        self.max_steering_angle = rospy.get_param("~max_steering_angle", 0.523599)
+        self._wheel_radius = rospy.get_param("~wheel_radius", 0.03)
+        self._wheel_separation = rospy.get_param("~wheel_separation", 0.159202)
+        self._wheel_base = rospy.get_param("~wheel_base", 0.164023)
+        self.update_rate = rospy.get_param("~update_rate", 50) # Hz
 
         self._cmd_lock = threading.Lock()
         # Car speed (m/s)
@@ -42,14 +35,31 @@ class CarController():
         # Steering angle (rad)
         self.steering_angle = 0
 
+        # get topics for wheels and steering
+        # VELOCITY_TOPICS = []
+        # VELOCITY_TOPICS.append(rospy.get_param("~l_rear_wheel", '/left_rear_wheel_velocity_controller/command'))
+        # VELOCITY_TOPICS.append(rospy.get_param("~r_rear_wheel", '/right_rear_wheel_velocity_controller/command'))
+        # VELOCITY_TOPICS.append(rospy.get_param("~l_front_wheel", '/left_front_wheel_velocity_controller/command'))
+        # VELOCITY_TOPICS.append(rospy.get_param("~r_front_wheel", '/right_front_wheel_velocity_controller/command'))
+        # STEERING_TOPICS = []
+        # STEERING_TOPICS.append(rospy.get_param("~left_steer", '/left_steering_hinge_position_controller/command'))
+        # STEERING_TOPICS.append(rospy.get_param("~right_steer", '/right_steering_hinge_position_controller/command'))
+
         # Create publishers for controlling the car
         self._velocity_pub_dict_ = OrderedDict()
         self._steering_pub_dict_ = OrderedDict()
 
-        for topic in VELOCITY_TOPICS:
-            self._velocity_pub_dict_[topic] = rospy.Publisher(topic, Float64MultiArray, queue_size=1)
-        for l_r, topic in STEERING_TOPICS:
-            self._steering_pub_dict_[l_r] = rospy.Publisher(topic, Float64MultiArray, queue_size=1)
+        # for topic in VELOCITY_TOPICS:
+        #     self._velocity_pub_dict_[topic] = rospy.Publisher(topic, Float64MultiArray, queue_size=1)
+        self._velocity_pub_dict_["l_rear_wheel"] = rospy.Publisher('/left_rear_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
+        self._velocity_pub_dict_["r_rear_wheel"] = rospy.Publisher('/right_rear_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
+        self._velocity_pub_dict_["l_front_wheel"] = rospy.Publisher('/left_front_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
+        self._velocity_pub_dict_["r_front_wheel"] = rospy.Publisher('/right_front_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
+        
+        # for l_r, topic in STEERING_TOPICS:
+        #     self._steering_pub_dict_[l_r] = rospy.Publisher(topic, Float64MultiArray, queue_size=1)
+        self._steering_pub_dict_['left'] = rospy.Publisher('/left_steering_hinge_position_controller/command', Float64MultiArray, queue_size=1)
+        self._steering_pub_dict_['right'] = rospy.Publisher('/right_steering_hinge_position_controller/command', Float64MultiArray, queue_size=1)
         
         self.cmd_sub = rospy.Subscriber("/ackermann_cmd", AckermannDriveStamped,
                              self.ackermann_cmd_cb, queue_size=1)
@@ -57,11 +67,9 @@ class CarController():
         self.control()
 
     def control(self):
-        update_rate = 50 # Hz
-        rate = rospy.Rate(update_rate) 
-        update_period = 1/update_rate
-        # rospy.loginfo("update_period {}".format(update_period))
-
+        rate = rospy.Rate(self.update_rate) 
+        update_period = 1/self.update_rate
+        
         last_time = rospy.get_time()
 
         while not rospy.is_shutdown():
@@ -82,9 +90,9 @@ class CarController():
 
     def calcTargetVelAndPosition(self, delta_t):
         
-        target_speed = max(min(MAX_SPEED, self.speed), MIN_SPEED)
+        target_speed = max(min(self.max_speed, self.speed), -self.max_speed)
         target_steer_angle = self.steering_angle * math.copysign(1.0, self.speed)
-        target_steer_angle = max(min(MAX_ANGLE, target_steer_angle), MIN_ANGLE)
+        target_steer_angle = max(min(self.max_steering_angle, target_steer_angle), -self.max_steering_angle)
 
         tanSteer = math.tan(target_steer_angle)
 

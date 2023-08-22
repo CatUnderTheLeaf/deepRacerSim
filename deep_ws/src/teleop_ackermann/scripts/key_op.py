@@ -54,6 +54,7 @@ class KeyTeleopAckermann():
         tty.setraw(sys.stdin.fileno())
         select.select([sys.stdin], [], [], 0)
         key = sys.stdin.read(1)
+        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self.settings)
         return key
 
     def printInfo(self):
@@ -69,7 +70,7 @@ class KeyTeleopAckermann():
                       self.speed, self.steering_angle)
 
     def control(self):        
-        
+        self.settings = termios.tcgetattr(sys.stdin)
         while not rospy.is_shutdown():
             key = self.read_key()
             if key in keys.values():
@@ -90,13 +91,12 @@ class KeyTeleopAckermann():
             else:
                 continue
 
-        sys.exit()
         # publish last zero commands
+        self.settings = termios.tcgetattr(sys.stdin)
         self.speed = 0
         self.steering_angle = 0
-        self.publishMessage()
-
-
+        self.publishMessage(self.speed)
+        sys.exit()
 
 if __name__ == '__main__':
     try:

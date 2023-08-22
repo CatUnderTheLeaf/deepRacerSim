@@ -7,7 +7,7 @@
   <arg name="scale_angle" default="10"/>
   <arg name="update_rate" default="50"/>
    
-  <node name="teleop" pkg="teleop_ackermann" type="key_op.py">
+  <node name="teleop" pkg="teleop_ackermann" type="key_op.py" output="screen">
     <param name="max_speed" value="$(arg max_speed)"/>
     <param name="max_steering_angle" value="$(arg max_steering_angle)"/>
     <param name="scale_speed" value="$(arg scale_speed)"/>

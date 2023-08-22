@@ -2,7 +2,7 @@
 <package format="2">
   <name>deepracer_car</name>
   <version>0.0.1</version>
-  <description>The deepracer_car package</description>
+  <description>The deepracer_car package. It uses AWS config, urdf and mesh files for a DeepRacer car.</description>
 
   <maintainer email="catundertheleaf@gmail.com">Stacy</maintainer>
  
@@ -13,18 +13,12 @@
   
   <depend>ackermann_msgs</depend>
   <build_depend>rospy</build_depend>
-  <build_depend>geometry_msgs</build_depend>
   <build_depend>gazebo</build_depend>
   <build_depend>gazebo_ros</build_depend>
-  <!-- <build_depend>sensor_msgs</depend> -->
-  <!-- <build_depend>cv_bridge</depend> -->
-  <!-- <build_depend>image_transport</depend> -->
   <build_depend>std_msgs</build_depend>
   <build_export_depend>rospy</build_export_depend>
-  <build_export_depend>geometry_msgs</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
   <exec_depend>rospy</exec_depend>
-  <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>gazebo_ros_control</exec_depend>
