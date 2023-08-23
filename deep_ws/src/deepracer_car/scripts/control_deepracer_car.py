@@ -7,18 +7,7 @@ from std_msgs.msg import Float64MultiArray
 from collections import OrderedDict
 import math
 import threading
-
-
-# List of required velocity topics, one topic per wheel
-# VELOCITY_TOPICS = ['/left_rear_wheel_velocity_controller/command',
-#                    '/right_rear_wheel_velocity_controller/command',
-#                    '/left_front_wheel_velocity_controller/command',
-#                    '/right_front_wheel_velocity_controller/command']
-
-# List of required steering hinges
-# STEERING_TOPICS = [('left','/left_steering_hinge_position_controller/command'),
-#                    ('right','/right_steering_hinge_position_controller/command')]
-
+      
 class CarController():
 
     def __init__(self):
@@ -35,29 +24,15 @@ class CarController():
         # Steering angle (rad)
         self.steering_angle = 0
 
-        # get topics for wheels and steering
-        # VELOCITY_TOPICS = []
-        # VELOCITY_TOPICS.append(rospy.get_param("~l_rear_wheel", '/left_rear_wheel_velocity_controller/command'))
-        # VELOCITY_TOPICS.append(rospy.get_param("~r_rear_wheel", '/right_rear_wheel_velocity_controller/command'))
-        # VELOCITY_TOPICS.append(rospy.get_param("~l_front_wheel", '/left_front_wheel_velocity_controller/command'))
-        # VELOCITY_TOPICS.append(rospy.get_param("~r_front_wheel", '/right_front_wheel_velocity_controller/command'))
-        # STEERING_TOPICS = []
-        # STEERING_TOPICS.append(rospy.get_param("~left_steer", '/left_steering_hinge_position_controller/command'))
-        # STEERING_TOPICS.append(rospy.get_param("~right_steer", '/right_steering_hinge_position_controller/command'))
-
         # Create publishers for controlling the car
         self._velocity_pub_dict_ = OrderedDict()
         self._steering_pub_dict_ = OrderedDict()
 
-        # for topic in VELOCITY_TOPICS:
-        #     self._velocity_pub_dict_[topic] = rospy.Publisher(topic, Float64MultiArray, queue_size=1)
         self._velocity_pub_dict_["l_rear_wheel"] = rospy.Publisher('/left_rear_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
         self._velocity_pub_dict_["r_rear_wheel"] = rospy.Publisher('/right_rear_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
         self._velocity_pub_dict_["l_front_wheel"] = rospy.Publisher('/left_front_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
         self._velocity_pub_dict_["r_front_wheel"] = rospy.Publisher('/right_front_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
         
-        # for l_r, topic in STEERING_TOPICS:
-        #     self._steering_pub_dict_[l_r] = rospy.Publisher(topic, Float64MultiArray, queue_size=1)
         self._steering_pub_dict_['left'] = rospy.Publisher('/left_steering_hinge_position_controller/command', Float64MultiArray, queue_size=1)
         self._steering_pub_dict_['right'] = rospy.Publisher('/right_steering_hinge_position_controller/command', Float64MultiArray, queue_size=1)
         
