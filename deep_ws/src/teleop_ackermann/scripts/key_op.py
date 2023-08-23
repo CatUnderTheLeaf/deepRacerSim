@@ -2,7 +2,6 @@
 
 import rospy
 from ackermann_msgs.msg import AckermannDriveStamped
-from std_msgs.msg import Float64
 
 import sys, select, termios, tty
 
@@ -36,13 +35,13 @@ class KeyTeleopAckermann():
         self.ack_pub = rospy.Publisher('ackermann_cmd', AckermannDriveStamped, queue_size=1)
 
         # publish ackermann_msg with a rate
-        rospy.Timer(rospy.Duration(1.0/self.update_rate), self.publishMessage)
+        rospy.Timer(rospy.Duration(1.0/self.update_rate), self.publish_message)
 
         # control key input
-        self.printInfo()
+        self.print_info()
         self.control()
 
-    def publishMessage(self, event):
+    def publish_message(self, event):
         msg = AckermannDriveStamped()
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = '/base_link'
@@ -57,7 +56,7 @@ class KeyTeleopAckermann():
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self.settings)
         return key
 
-    def printInfo(self):
+    def print_info(self):
         sys.stderr.write('\x1b[2J\x1b[H')
         rospy.loginfo('\x1b[1M\r*********************************************')
         rospy.loginfo('\x1b[1M\rUse up/down arrows to change speed')
@@ -85,7 +84,7 @@ class KeyTeleopAckermann():
                     # clip in between min and max values
                     self.speed = max(min(self.max_speed, self.speed), -self.max_speed)                        
                     self.steering_angle = max(min(self.max_steering_angle, self.steering_angle), -self.max_steering_angle)
-                self.printInfo()            
+                self.print_info()            
             elif key == '\x03':  # ctr-c or q
                 break
             else:
@@ -95,7 +94,7 @@ class KeyTeleopAckermann():
         self.settings = termios.tcgetattr(sys.stdin)
         self.speed = 0
         self.steering_angle = 0
-        self.publishMessage(self.speed)
+        self.publish_message(self.speed)
         sys.exit()
 
 if __name__ == '__main__':

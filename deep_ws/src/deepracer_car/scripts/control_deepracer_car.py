@@ -57,13 +57,13 @@ class CarController():
 
                 #  Calculate target velocity and position values and publish the commands
                 with self._cmd_lock:
-                    t_speed, t_left_steering, t_right_steering = self.calcTargetVelAndPosition(delta_t)
+                    t_speed, t_left_steering, t_right_steering = self.calc_target_speed_steering(delta_t)
                 self.publish_commands(t_speed, t_left_steering, t_right_steering)
                 last_time = t
 
             rate.sleep()
 
-    def calcTargetVelAndPosition(self, delta_t):
+    def calc_target_speed_steering(self, delta_t):
         
         target_speed = max(min(self.max_speed, self.speed), -self.max_speed)
         target_steer_angle = self.steering_angle * math.copysign(1.0, self.speed)
