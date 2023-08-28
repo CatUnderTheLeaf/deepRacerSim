@@ -162,6 +162,7 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
   scripts/key_op.py
+  scripts/joy_op.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

@@ -10,8 +10,10 @@
 
 </launch>
 
-<!-- control car in another terminal window with -->
-<!-- roslaunch teleop_ackermann teleop.launch -->
+<!-- control car in another terminal window with keyboard-->
+<!-- roslaunch teleop_ackermann key_teleop.launch -->
+<!-- or with joy -->
+<!-- roslaunch teleop_ackermann joy_teleop.launch -->
 
 <!-- export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/home/kolobok/my_projects/deepRacerSim/deep_ws/src/simulation/tracks/ -->
  <!-- export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/home/kolobok/my_projects/deepRacerSim/deep_ws/src/simulation/ -->
