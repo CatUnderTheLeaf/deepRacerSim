@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="world_name" default="$(find simulation)/worlds/2022_april_open_ccw.world"/>
+  <arg name="world_name" default="$(find simulation)/worlds/2022_march_pro.world"/>
 
   <include file="$(find deepracer_car)/launch/gazebo.launch">
     <arg name="world_name" value="$(arg world_name)"/>
