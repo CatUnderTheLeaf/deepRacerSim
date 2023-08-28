@@ -23,7 +23,7 @@ class CollectData():
         self.cv_image = None
         self.data = []
         self.image_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'images')
-        self.csv_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'data.csv')
+        self.csv_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
 
         self.cmd_sub = rospy.Subscriber("/ackermann_cmd", AckermannDriveStamped, self.ackermann_cmd_cb, queue_size=1)
         
@@ -64,7 +64,8 @@ class CollectData():
     
     def save_data(self):
         rospy.loginfo("saving data")
-        with open(self.csv_path, 'w') as f:
+        fname = os.path.join(self.csv_path, str(time.time())+'.csv')
+        with open(fname, 'w') as f:
             writer = csv.writer(f)
             writer.writerows(self.data)
 
