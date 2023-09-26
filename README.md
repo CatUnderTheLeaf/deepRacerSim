@@ -90,3 +90,4 @@ export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/path/to/deepRacerSim/deep_ws/
    # or launch joy teleoperation
    roslaunch teleop_ackermann joy_teleop.launch
    ```
+![simulation](images/Screenshot.png)
