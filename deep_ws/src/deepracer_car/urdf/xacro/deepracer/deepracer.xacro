@@ -18,7 +18,7 @@ limitations under the License.
   <!-- agent argument from python xacro call-->
   <xacro:arg name="agent_name" default="agent" />
   <!-- Default: Use front facing camera and LiDAR sensor -->
-  <xacro:arg name="sensor_type" default="front_facing_camera_and_lidar" />
+  <xacro:arg name="sensor_type" default="front_facing_camera" />
   <xacro:arg name="shell" default="deepracer.STL" />
   <xacro:arg name="agent_bitmask" default="0x01" />
   <xacro:arg name="shell_joint_origin_x" default="-0.0762" />
