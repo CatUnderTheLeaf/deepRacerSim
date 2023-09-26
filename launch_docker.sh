@@ -23,4 +23,4 @@ docker run -it --net=host --gpus --ipc=host --privileged ${DOCKER_ARGS} deep-sim
 
 # Run the command with params (if added)
 # ./launch_docker.sh deep-simulator "roslaunch simulation simulation.launch"
-docker run -it --net=host --ipc=host --privileged ${DOCKER_ARGS} "$1" bash -c "$2"
+# docker run -it --net=host --ipc=host --privileged ${DOCKER_ARGS} "$1" bash -c "$2"
