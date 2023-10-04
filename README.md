@@ -12,9 +12,6 @@ cd deepRacerSim
 
 # Build docker image with
 docker build -f deepRacerSim.Dockerfile -t deep-simulator .
-
-# launch a Docker container
-./launch_docker.sh 
 ```
 
 ### With Ubuntu 20.04 or Windows
@@ -53,13 +50,13 @@ rosdep install --from-paths src --ignore-src --rosdistro noetic
 # Build packages
 catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3
 
-# Source this workspace
-source devel/setup.bash
-
 # export path variables for Gazebo, replace with appropriate path
-# also add it to ~/.bashrc not to export it all the time
 export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/path/to/deepRacerSim/deep_ws/src/simulation/tracks/
 export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/path/to/deepRacerSim/deep_ws/src/simulation/
+
+# also add it to ~/.bashrc not to export it all the time
+echo "export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/path/to/deepRacerSim/deep_ws/src/simulation/tracks/" >> ~/.bashrc
+echo "export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/path/to/deepRacerSim/deep_ws/src/simulation/" >> ~/.bashrc
 ```
 
 ## Simulation
@@ -68,10 +65,18 @@ export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/path/to/deepRacerSim/deep_ws/
    ```
    cd /path/to/deepRacerSim/deep_ws
 
-   # if not sourced
+   # ---- if with Docker ----
+
+   # launch a Docker container
+   ./launch_docker.sh 
+
+   # ---- else ----
+
    source devel/setup.bash
 
    # export GAZEBO_MODEL_PATH and GAZEBO_RESOURCE_PATH from installation if they are not in ~/.bashrc
+
+   # ---- endif ----
 
    # launch simulation
    # there will be 1-2 gazebo model errors - it is ok,
@@ -83,8 +88,16 @@ export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/path/to/deepRacerSim/deep_ws/
    # in another terminal
    cd /path/to/deepRacerSim/deep_ws
 
-   # if not sourced
+   # ---- if with Docker ----
+
+   # launch a Docker container
+   ./launch_docker.sh 
+
+   # ---- else ----
+
    source devel/setup.bash
+
+   # ---- endif ----
 
    # launch keyboard teleoperation
    roslaunch teleop_ackermann key_teleop.launch
