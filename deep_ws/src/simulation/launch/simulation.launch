@@ -2,7 +2,7 @@
 <launch>
   <arg name="world_name" default="$(find simulation)/worlds/2022_march_pro.world"/>
 
-  <include file="$(find deepracer_car)/launch/gazebo.launch">
+  <include file="$(find simulation)/launch/gazebo.launch">
     <arg name="world_name" value="$(arg world_name)"/>
   </include>
 
