@@ -4,6 +4,8 @@
 
 ### With Docker
 
+You might need to run ```xhost +local:root``` on the host machine to allow the Docker container to access the X11 server.
+
 ```
 # change dir to this repository
 cd deepRacerSim
