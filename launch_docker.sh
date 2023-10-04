@@ -19,7 +19,7 @@ DOCKER_ENV_VARS="
 DOCKER_ARGS=${DOCKER_ENV_VARS}
 
 # Run the command
-docker run -it --net=host --gpus --ipc=host --privileged ${DOCKER_ARGS} deep-simulator bash
+docker run -it --net=host --gpus all --ipc=host --privileged ${DOCKER_ARGS} deep-simulator bash
 
 # Run the command with params (if added)
 # ./launch_docker.sh deep-simulator "roslaunch simulation simulation.launch"

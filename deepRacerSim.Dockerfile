@@ -33,8 +33,9 @@ RUN yes | rosdep install --from-paths src --ignore-src --rosdistro noetic
 
 # Build the Catkin workspace and ensure it's sourced
 RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3'
+RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 RUN echo "source /deepRacerSim/deep_ws/devel/setup.bash" >> ~/.bashrc
  
 # export Gazebo variables
-RUN export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/deepRacerSim/deep_ws/src/simulation/tracks/
-RUN export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/deepRacerSim/deep_ws/src/simulation/
+RUN echo "export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/deepRacerSim/deep_ws/src/simulation/tracks/" >> ~/.bashrc
+RUN echo "export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/deepRacerSim/deep_ws/src/simulation/" >> ~/.bashrc
