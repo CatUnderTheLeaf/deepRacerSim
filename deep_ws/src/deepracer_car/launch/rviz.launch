@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="make_required" default="true"/>
+  <param name="robot_description" command="$(find xacro)/xacro '$(find deepracer_car)/urdf/xacro/deepracer/deepracer.xacro'"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen" required="$(arg make_required)"/>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <!-- launch RVIZ -->
+  <arg name="rvizconfig" default="$(find deepracer_car)/rviz/rviz.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="$(arg make_required)" />
+
+</launch>
