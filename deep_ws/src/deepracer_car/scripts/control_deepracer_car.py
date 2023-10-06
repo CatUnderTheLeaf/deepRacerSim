@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import rospy
 from ackermann_msgs.msg import AckermannDriveStamped
-from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import Float64MultiArray, Float64
 
 
 from collections import OrderedDict
@@ -28,14 +28,23 @@ class CarController():
         self._velocity_pub_dict_ = OrderedDict()
         self._steering_pub_dict_ = OrderedDict()
 
-        self._velocity_pub_dict_["l_rear_wheel"] = rospy.Publisher('/left_rear_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
-        self._velocity_pub_dict_["r_rear_wheel"] = rospy.Publisher('/right_rear_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
-        self._velocity_pub_dict_["l_front_wheel"] = rospy.Publisher('/left_front_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
-        self._velocity_pub_dict_["r_front_wheel"] = rospy.Publisher('/right_front_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
+        # self._velocity_pub_dict_["l_rear_wheel"] = rospy.Publisher('/left_rear_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
+        # self._velocity_pub_dict_["r_rear_wheel"] = rospy.Publisher('/right_rear_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
+        # self._velocity_pub_dict_["l_front_wheel"] = rospy.Publisher('/left_front_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
+        # self._velocity_pub_dict_["r_front_wheel"] = rospy.Publisher('/right_front_wheel_velocity_controller/command', Float64MultiArray, queue_size=1)
         
-        self._steering_pub_dict_['left'] = rospy.Publisher('/left_steering_hinge_position_controller/command', Float64MultiArray, queue_size=1)
-        self._steering_pub_dict_['right'] = rospy.Publisher('/right_steering_hinge_position_controller/command', Float64MultiArray, queue_size=1)
+        # self._steering_pub_dict_['left'] = rospy.Publisher('/left_steering_hinge_position_controller/command', Float64MultiArray, queue_size=1)
+        # self._steering_pub_dict_['right'] = rospy.Publisher('/right_steering_hinge_position_controller/command', Float64MultiArray, queue_size=1)
         
+        self._velocity_pub_dict_["l_rear_wheel"] = rospy.Publisher('/left_rear_wheel_velocity_controller/command', Float64, queue_size=1)
+        self._velocity_pub_dict_["r_rear_wheel"] = rospy.Publisher('/right_rear_wheel_velocity_controller/command', Float64, queue_size=1)
+        self._velocity_pub_dict_["l_front_wheel"] = rospy.Publisher('/left_front_wheel_velocity_controller/command', Float64, queue_size=1)
+        self._velocity_pub_dict_["r_front_wheel"] = rospy.Publisher('/right_front_wheel_velocity_controller/command', Float64, queue_size=1)
+        
+        self._steering_pub_dict_['left'] = rospy.Publisher('/left_steering_hinge_position_controller/command', Float64, queue_size=1)
+        self._steering_pub_dict_['right'] = rospy.Publisher('/right_steering_hinge_position_controller/command', Float64, queue_size=1)
+        
+
         self.cmd_sub = rospy.Subscriber("/ackermann_cmd", AckermannDriveStamped,
                              self.ackermann_cmd_cb, queue_size=1)
 
@@ -76,6 +85,10 @@ class CarController():
 
         t_speed = target_speed / self._wheel_radius
 
+# TODO
+# don't go backwards for speed < 0
+# when speed==0 center wheels, else a car will spin
+
         return t_speed, t_left_steering, t_right_steering
 
     def ackermann_cmd_cb(self, msg):
@@ -94,20 +107,26 @@ class CarController():
         t_left_steering, t_right_steering - Desired amount, in radians, to move the movable joints by
         t_speed - Angular velocity which the velocity joints should rotate with
         '''
-        speed_msg = Float64MultiArray()
-        speed_msg.data.append(t_speed)
+        # speed_msg = Float64MultiArray()
+        # speed_msg.data.append(t_speed)
 
-        left_steering_msg = Float64MultiArray()
-        left_steering_msg.data.append(t_left_steering)
+        # left_steering_msg = Float64MultiArray()
+        # left_steering_msg.data.append(t_left_steering)
 
-        right_steering_msg = Float64MultiArray()
-        right_steering_msg.data.append(t_right_steering)
+        # right_steering_msg = Float64MultiArray()
+        # right_steering_msg.data.append(t_right_steering)
+
+        # for _, pub in self._velocity_pub_dict_.items():
+        #     pub.publish(speed_msg)
+
+        # self._steering_pub_dict_['left'].publish(left_steering_msg)
+        # self._steering_pub_dict_['right'].publish(right_steering_msg)
 
         for _, pub in self._velocity_pub_dict_.items():
-            pub.publish(speed_msg)
+            pub.publish(t_speed)
 
-        self._steering_pub_dict_['left'].publish(left_steering_msg)
-        self._steering_pub_dict_['right'].publish(right_steering_msg)
+        self._steering_pub_dict_['left'].publish(t_left_steering)
+        self._steering_pub_dict_['right'].publish(t_right_steering)
         
 
 
