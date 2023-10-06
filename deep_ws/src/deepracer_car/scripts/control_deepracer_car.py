@@ -74,7 +74,8 @@ class CarController():
 
     def calc_target_speed_steering(self, delta_t):
         
-        target_speed = max(min(self.max_speed, self.speed), -self.max_speed)
+        # don't go backwards for speed < 0
+        target_speed = max(min(self.max_speed, self.speed), 0)
         target_steer_angle = self.steering_angle * math.copysign(1.0, self.speed)
         target_steer_angle = max(min(self.max_steering_angle, target_steer_angle), -self.max_steering_angle)
 
@@ -84,10 +85,10 @@ class CarController():
         t_right_steering = math.atan2(tanSteer, 1.0 + self._wheel_separation / 2.0 / self._wheel_base * tanSteer)
 
         t_speed = target_speed / self._wheel_radius
-
-# TODO
-# don't go backwards for speed < 0
-# when speed==0 center wheels, else a car will spin
+        
+        # when speed==0 center wheels, else a car will spin
+        if t_speed==0:
+            t_left_steering = t_right_steering = 0
 
         return t_speed, t_left_steering, t_right_steering
 

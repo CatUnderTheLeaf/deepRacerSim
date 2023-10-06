@@ -82,8 +82,10 @@ class KeyTeleopAckermann():
                     self.speed = self.speed + a_speed
                     self.steering_angle = self.steering_angle + a_angle
                     # clip in between min and max values
-                    self.speed = max(min(self.max_speed, self.speed), -self.max_speed)                        
+                    self.speed = max(min(self.max_speed, self.speed), 0)                        
                     self.steering_angle = max(min(self.max_steering_angle, self.steering_angle), -self.max_steering_angle)
+                    if self.speed==0:
+                        self.steering_angle=0
                 self.print_info()            
             elif key == '\x03':  # ctr-c or q
                 break
