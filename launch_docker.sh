@@ -4,17 +4,14 @@
 # Usage Example:
 # ./launch_docker.sh 
 
-# Define Docker volumes and environment variables
-# DOCKER_VOLUMES="
-# --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-# --volume="${XAUTHORITY:-$HOME/.Xauthority}:/root/.Xauthority" \
-# "
 DOCKER_ENV_VARS="
 --env="DISPLAY" \
 --env="QT_X11_NO_MITSHM=1" \
 --env="NVIDIA_DRIVER_CAPABILITIES=all" \
 --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
 "
+# if use repository as volume
+# --volume="${PWD}/deep_ws/src":"/deep_ws/src":rw \
 # DOCKER_ARGS=${DOCKER_VOLUMES}" "${DOCKER_ENV_VARS}
 DOCKER_ARGS=${DOCKER_ENV_VARS}
 

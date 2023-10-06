@@ -4,7 +4,7 @@
 ARG ROS_DISTRO=noetic
  
 ########################################
-# Base Image for TurtleBot3 Simulation #
+# Base Image for DeepRacer Simulation #
 ########################################
 FROM osrf/ros:${ROS_DISTRO}-desktop-full as base
 ENV ROS_DISTRO=${ROS_DISTRO}
@@ -12,10 +12,6 @@ SHELL ["/bin/bash", "-c"]
  
 # Install Git and Python3
 RUN apt-get update && apt-get install -y git python3-pip
-
-# Install required Python packages
-# RUN pip install --no-cache-dir \
-#         catkin_pkg
 
 # Download this repository
 RUN git clone https://github.com/CatUnderTheLeaf/deepRacerSim.git
