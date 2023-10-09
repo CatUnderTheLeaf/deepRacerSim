@@ -43,8 +43,10 @@ class JoyTeleopAckermann():
         elif(data.buttons[self.align_button]==1):
             self.steering_angle = 0.0
         else:
-            self.speed = round(data.axes[self.speed_axis], 2) * self.max_speed
+            self.speed = max(round(data.axes[self.speed_axis], 2) * self.max_speed, 0.0)
             self.steering_angle = round(data.axes[self.steering_axis], 2) * self.max_steering_angle 
+            if self.speed==0:
+                self.steering_angle=0
 
     def publish_message(self, event):
         msg = AckermannDriveStamped()
