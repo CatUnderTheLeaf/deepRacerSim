@@ -23,6 +23,9 @@ class CarController():
         self.speed = 0
         # Steering angle (rad)
         self.steering_angle = 0
+        # Zero steering angle velocity means change 
+        # the steering angle as quickly as possible.
+        self.steering_angle_velocity = 0
 
         # Create publishers for controlling the car
         self._velocity_pub_dict_ = OrderedDict()
@@ -76,8 +79,7 @@ class CarController():
         
         # don't go backwards for speed < 0
         target_speed = max(min(self.max_speed, self.speed), 0)
-        target_steer_angle = self.steering_angle * math.copysign(1.0, self.speed)
-        target_steer_angle = max(min(self.max_steering_angle, target_steer_angle), -self.max_steering_angle)
+        target_steer_angle = max(min(self.max_steering_angle, self.steering_angle), -self.max_steering_angle)
 
         tanSteer = math.tan(target_steer_angle)
 
@@ -86,6 +88,9 @@ class CarController():
 
         t_speed = target_speed / self._wheel_radius
         
+        if self.steering_angle_velocity == 0:
+            t_left_steering = t_right_steering = target_steer_angle
+
         # when speed==0 center wheels, else a car will spin
         if t_speed==0:
             t_left_steering = t_right_steering = 0
@@ -96,7 +101,8 @@ class CarController():
         # rospy.loginfo("received msg")
         with self._cmd_lock:
             self.speed = msg.drive.speed
-            self.steering_angle = msg.drive.steering_angle  
+            self.steering_angle = msg.drive.steering_angle
+            self.steering_angle_velocity = msg.drive.steering_angle_velocity
         # rospy.loginfo("from msg speed {}".format(self.speed)) 
         # rospy.loginfo("from msg steering_angle {}".format(self.steering_angle))       
 
