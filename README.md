@@ -107,23 +107,21 @@ echo "export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/path/to/deepRacerSim/de
    ```
 ![simulation](images/Screenshot.png)
 
-### View car the camera 
+### View from the camera 
 
-The car camera images are being published to the '/camera/zed/rgb/image_rect_color' topic. 
+The car camera images are being published to the `/camera/zed/rgb/image_rect_color` topic. 
 
-You can view the camera feed by using the rqt_image_view 
+You can view the camera feed by using the `rqt_image_view`, just run:
 
-To view the image stream using rqt_image_view, run:
-
-```bash
-rqt_image_view
+``` bash
+$ rqt_image_view
 ```
 
-A GUI will appear, and you can select the /camera/zed/rgb/image_rect_color topic from the dropdown menu to view the camera feed.
+A GUI will appear, and you can select the `/camera/zed/rgb/image_rect_color` topic from the dropdown menu to view the camera feed.
 
-Alternatively, you can use image_view with the following command:
+Alternatively, you can use `image_view` with the following command:
 
-```bash
-rosrun image_view image_view image:=/camera/zed/rgb/image_rect_color
+``` bash
+$ rosrun image_view image_view image:=/camera/zed/rgb/image_rect_color
 ```
 This will open a window displaying the live feed from the camera attached to your ROS agent in the Gazebo simulation.
